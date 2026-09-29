@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model LopHoc {
+  id        Int        @id @default(autoincrement())
+  tenLop    String     @map("ten_lop") @db.VarChar(100)
+  sinhViens SinhVien[]
+
+  @@map("lophoc")
+}
+
+model SinhVien {
+  id     Int     @id @default(autoincrement())
+  hoTen  String  @map("ho_ten") @db.VarChar(100)
+  email  String  @unique @db.VarChar(100)
+  tuoi   Int?
+  lopId  Int?    @map("lop_id")
+  lopHoc LopHoc? @relation(fields: [lopId], references: [id], onDelete: SetNull)
+
+  @@map("sinhvien")
+}
